@@ -1,0 +1,58 @@
+<!DOCTYPE html>	
+<html lang="en" ng-app="chatApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.10.0/firebase.js"></script>
+<script>
+  var config = {
+  apiKey: "AIzaSyBsnMUw38U4Uu_3TBetmXd2L7vFVDZXDGc",
+  authDomain: "chat-stromez.firebaseapp.com",
+  databaseURL: "https://chat-stromez-default-rtdb.firebaseio.com",
+  projectId: "chat-stromez",
+  storageBucket: "chat-stromez.appspot.com",
+  messagingSenderId: "72296329093",
+  appId: "1:72296329093:web:83269f7d8c1f900280deec",
+  measurementId: "G-D39LG4MYKR"
+  };
+  firebase.initializeApp(config);
+  var app = angular.module('chatApp', ['firebase']);
+
+app.controller('ChatController', function($scope, $firebaseArray) {
+    var ref = firebase.database().ref().child('messages');
+    $scope.messages = $firebaseArray(ref);
+
+    $scope.send = function() {
+        $scope.messages.$add({
+            message: $scope.messageText,
+			username: $scope.username,
+            date: Date.now()
+        })
+    }
+})
+</script>
+<script src="https://cdn.firebase.com/libs/angularfire/2.2.0/angularfire.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body ng-controller="ChatController">
+    <br>
+    <div class="container">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Chatting ỏoooooo</div>
+            <div class="panel-body">
+                <p ng-repeat="m in messages"><b>{{m.username}}:</b> {{m.message}} - <i>{{m.date | date:'mediumTime'}}</i></p>
+                <div class="form-group">
+					<input type="text" class="form-control" placeholder="Username" ng-model="username">
+                    <input type="text" class="form-control" placeholder="Message here..." ng-model="messageText" required>	
+                </div>
+                <button type="submit" class="btn btn-default" ng-click="send()">Send</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+  
+
+
